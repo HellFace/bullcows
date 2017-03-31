@@ -7,7 +7,13 @@ class Match < ApplicationRecord
       opponent = REDIS.get("waiting")
       Game.start(uuid, opponent)
       
-      Redis.set("waiting", nil)
+      REDIS.set("waiting", nil)
+    end
+  end
+  
+  def self.remove(uuid)
+    if uuid == REDIS.get("waiting")
+      REDIS.set("waiting", nil)
     end
   end
   
