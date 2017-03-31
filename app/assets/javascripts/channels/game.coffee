@@ -1,6 +1,7 @@
 App.game = App.cable.subscriptions.create "GameChannel",
   connected: ->
     # Called when the subscription is ready for use on the server
+    console.log('waiting')
     $('#status').html("Waiting for an other player")
 
   disconnected: ->
