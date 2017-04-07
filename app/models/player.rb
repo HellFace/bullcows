@@ -3,7 +3,11 @@ class Player < ApplicationRecord
   
   def initialize(attributes = {})
     @uuid = attributes[:uuid]
-    set_match
+  end
+  
+  def set_name(name)
+    @name = name
+    
   end
   
   def set_match
