@@ -1,29 +1,50 @@
-class Player < ApplicationRecord
-  attr_accessor :uuid, :name, :number
-  
-  def initialize(attributes = {})
-    @uuid = attributes[:uuid]
-  end
-  
+class Player < Ohm::Model
+  attribute :uuid
+  attribute :name
+  attribute :number
+  attribute :status
+  index :status
+  reference :opponent, :Player
+
+=begin
   def set_name(name)
-    @name = name
-    
+    if self.save
+      self.name = name
+    end
   end
+
+  def set_number(number)
+    if self.save
+      self.number = number
+    end
+  end
+=end
   
   def set_match
-    if REDIS.get("waiting").blank?
-      REDIS.set("waiting", @uuid)
+    finder = Player.find(status: 'waiting')
+    if finder.empty?
+      self.update(status: 'waiting')
+      'waiting_opponent'
     else
-      opponent = REDIS.get("waiting")
-      Game.start(@uuid, opponent)
-      REDIS.set("waiting", nil)
+      waiting = finder.first
+      waiting.set_opponent(self)
+      set_opponent(waiting)
+      return waiting
     end
+  end
+
+  def set_waiting
+    if self.save
+      self.status = 'waiting'
+    end
+  end
+
+  def set_opponent(player)
+    self.update(status: 'playing', opponent: player)
   end
   
   def disconnect
-    if @uuid == REDIS.get("waiting")
-      REDIS.set("waiting", nil)
-    end
+    self.delete
   end
   
 end

@@ -1,39 +1,34 @@
 App.game = App.cable.subscriptions.create "GameChannel",
   connected: ->
-    # Called when the subscription is ready for use on the server
     $('#status').html("You are connected to the server! Please enter your name!")
 
   disconnected: ->
-    # Called when the subscription has been terminated by the server
 
   received: (data) ->
-    # Called when there's incoming data on the websocket for this channel
     switch data.action
+      when "waiting_opponent"
+        $('#status').html('Waiting for opponent to join')
       when "game_pending"
-      	#Waiting for player to connect
-      
+        $('#status').html(data.opponent_name)
       when "game_start"
-        $('#status').html("Player found")
-        App.gamePlay = new Game('#game-container', data.msg)
-
+        $('#status').html("Starting")
+        #App.gamePlay = new Game('#game-container', data.msg)
       when "take_turn"
-        App.gamePlay.move data.move
-        App.gamePlay.getTurn()
-
+        $('#status').html("Player found")
+        #App.gamePlay.move data.move
+        #App.gamePlay.getTurn()
       when "new_game"
-        App.gamePlay.newGame()
-
+        $('#status').html("Player found")
+        #App.gamePlay.newGame()
       when "opponent_withdraw"
         $('#status').html("Opponent withdraw, You win!")
-        $('#new-match').removeClass('hidden');
-        
+        #$('#new-match').removeClass('hidden');
   send_name: (name) ->
-  	@perform 'set_name', data: name
-  	
+    @perform 'set_name', data: name
+
   send_number: (number) ->
-  	@perform 'set_number', data: number
-  	
-  	
+    @perform 'set_number', data: number
+
   take_turn: (move) ->
     @perform 'take_turn', data: move
 
