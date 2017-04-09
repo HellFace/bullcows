@@ -9,18 +9,20 @@
   </head>
 
   <body>
-    <div class="heading">
-      <h1>Bulls and Cows</h1>
-    </div>
-
-    <div id="status"></div>
-
     <div class="container">
-      <%= yield %>
-    </div>
+      <div class="heading">
+        <h1>Bulls and Cows</h1>
+      </div>
 
-    <footer>
-      Green school 2017
-    </footer>
+      <div class="row">
+        <div class="col-md-12">
+          <%= yield %>
+        </div>
+      </div>
+
+      <footer>
+        Green school 2017
+      </footer>
+    </div>
   </body>
 </html>

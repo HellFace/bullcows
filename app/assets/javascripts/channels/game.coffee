@@ -1,7 +1,6 @@
 App.game = App.cable.subscriptions.create "GameChannel",
   connected: ->
-    $('#register').show();
-    $('#status').html("You are connected to the server! Please enter your name!")
+    $('#step-name').show();
 
   disconnected: ->
 
