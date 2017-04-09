@@ -4,26 +4,16 @@ class Player < Ohm::Model
   attribute :number
   attribute :status
   index :status
+  index :uuid
   reference :opponent, :Player
 
-=begin
-  def set_name(name)
-    if self.save
-      self.name = name
-    end
-  end
-
-  def set_number(number)
-    if self.save
-      self.number = number
-    end
-  end
-=end
   
   def set_match
     finder = Player.find(status: 'waiting')
     if finder.empty?
-      self.update(status: 'waiting')
+      if save
+        update(status: 'waiting')
+      end
       'waiting_opponent'
     else
       waiting = finder.first
@@ -33,18 +23,10 @@ class Player < Ohm::Model
     end
   end
 
-  def set_waiting
-    if self.save
-      self.status = 'waiting'
+  def set_opponent(player)
+    if save
+      update(status: 'playing', opponent: player)
     end
   end
 
-  def set_opponent(player)
-    self.update(status: 'playing', opponent: player)
-  end
-  
-  def disconnect
-    self.delete
-  end
-  
 end

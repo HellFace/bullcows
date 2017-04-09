@@ -1,5 +1,6 @@
 App.game = App.cable.subscriptions.create "GameChannel",
   connected: ->
+    $('#register').show();
     $('#status').html("You are connected to the server! Please enter your name!")
 
   disconnected: ->
@@ -7,11 +8,16 @@ App.game = App.cable.subscriptions.create "GameChannel",
   received: (data) ->
     switch data.action
       when "waiting_opponent"
+        $('#register').hide()
         $('#status').html('Waiting for opponent to join')
       when "game_pending"
-        $('#status').html(data.opponent_name)
+        $('#register').hide()
+        $('#number').show()
+        $('#status').html('Your opponent is ' + data.opponent_name + '. Please enter your number for the game...')
+      when "waiting_number"
+        $('#status').html('Waiting for your opponent to set his number')
       when "game_start"
-        $('#status').html("Starting")
+        $('#status').html("Game is set. We can finally start")
         #App.gamePlay = new Game('#game-container', data.msg)
       when "take_turn"
         $('#status').html("Player found")
