@@ -1,34 +1,37 @@
 <div class="row">
   <div class="col-md-6">
-    <h3 class="text-center">Your guesses</h3>
+    <div class="card card-outline-success">
+      <div class="card-header">Your guesses</div>
+      <div class="card-block">
+      asdfas
+      </div>
+    </div>
   </div>
   <div class="col-md-6">
-    <h3 class="text-center">Opponent guesses</h3>
+    <div class="card card-outline-warning">
+      <div class="card-header">Opponent guesses</div>
+      <div class="card-block">
+      asdfas
+      </div>
+    </div>
   </div>
 </div>
 
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
 
-    <div id="step-name" style="display:none;">
-      Please enter your name and we will find you an opponent.
-    </div>
-
-    <div id="step-waiting-connection" style="display:none;">
-      Please wait, while an opponent connects
-    </div>
-
-    <div id="step-number" style="display:none;">
-      We have found you and opponent. Please set your number, so we can start the game!
-    </div>
+    <div id="status"></div>
 
     <div id="input-section">
-      <input type="text" id="user_input" name="name" class="form-control" />
-      <button class="btn btn-primary" id="sendInputButton">Send</button>
+
+      <form class="form-inline">
+        <div class="form-group">
+          <input type="text" class="form-control" id="user_input" placeholder="">
+        </div>
+        <button class="btn btn-primary" id="sendInputButton">Submit</button>
+      </form>
+
     </div>
 
   </div>
 </div>
-
-
-<div id="status"></div>

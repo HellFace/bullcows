@@ -13,7 +13,7 @@ class GameChannel < ApplicationCable::Channel
   end
   
   def set_name(data)
-    @player.update(name: data["data"])
+    @player.update(name: data["name"])
     match_result = @player.set_match
     if match_result == 'waiting_opponent'
       ActionCable.server.broadcast "player_#{uuid}", {action: "waiting_opponent", msg: "Waiting for opponent to connect"}
@@ -26,7 +26,7 @@ class GameChannel < ApplicationCable::Channel
   
   def set_number(data)
     @player = Player.find(uuid: uuid).first
-    @player.update(number: data["data"])
+    @player.update(number: data["number"])
 
     opponent = @player.opponent
     if opponent.number.blank?
@@ -35,6 +35,16 @@ class GameChannel < ApplicationCable::Channel
       ActionCable.server.broadcast "player_#{uuid}", {action: "game_start", msg: "Start"}
       ActionCable.server.broadcast "player_#{opponent.uuid}", {action: "game_start", msg: "Start"}
     end
+  end
+
+  def take_guess(data)
+    @player = Player.find(uuid: uuid).first
+    opponent = @player.opponent
+
+    result = opponent.check_number(data["guess"])
+
+    ActionCable.server.broadcast "player_#{uuid}", {action: "take_turn", msg: "Start", bulls: result[:bulls], cows: result[:cows]}
+    ActionCable.server.broadcast "player_#{opponent.uuid}", {action: "take_turn", msg: "Start", bulls: result[:bulls], cows: result[:cows]}
   end
   
 end
