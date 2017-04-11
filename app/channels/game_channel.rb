@@ -4,6 +4,7 @@ class GameChannel < ApplicationCable::Channel
   def subscribed
     stream_from "player_#{uuid}"
     @player = Player.create(uuid: uuid)
+    ActionCable.server.broadcast "player_#{uuid}", {action: "set_player", uuid: uuid}
   end
 
   def unsubscribed
@@ -16,11 +17,11 @@ class GameChannel < ApplicationCable::Channel
     @player.update(name: data["name"])
     match_result = @player.set_match
     if match_result == 'waiting_opponent'
-      ActionCable.server.broadcast "player_#{uuid}", {action: "waiting_opponent", msg: "Waiting for opponent to connect"}
+      ActionCable.server.broadcast "player_#{uuid}", {action: "waiting_opponent"}
     else
       opponent = match_result
-      ActionCable.server.broadcast "player_#{uuid}", {action: "game_pending", msg: "Start", opponent_name: opponent.name, whole_op: opponent.opponent}
-      ActionCable.server.broadcast "player_#{opponent.uuid}", {action: "game_pending", msg: "Start", opponent_name: @player.name, status: @player.opponent}
+      ActionCable.server.broadcast "player_#{uuid}", {action: "game_pending", opponent_name: opponent.name}
+      ActionCable.server.broadcast "player_#{opponent.uuid}", {action: "game_pending", opponent_name: @player.name}
     end
   end
   
@@ -30,10 +31,11 @@ class GameChannel < ApplicationCable::Channel
 
     opponent = @player.opponent
     if opponent.number.blank?
-      ActionCable.server.broadcast "player_#{uuid}", {action: "waiting_number", msg: "Waiting for opponent to set number"}
+      ActionCable.server.broadcast "player_#{uuid}", {action: "waiting_number"}
     else
-      ActionCable.server.broadcast "player_#{uuid}", {action: "game_start", msg: "Start"}
-      ActionCable.server.broadcast "player_#{opponent.uuid}", {action: "game_start", msg: "Start"}
+      turn_uuid = [uuid, opponent.uuid].sample
+      ActionCable.server.broadcast "player_#{uuid}", {action: "game_start", turn: turn_uuid}
+      ActionCable.server.broadcast "player_#{opponent.uuid}", {action: "game_start", turn: turn_uuid}
     end
   end
 
@@ -42,9 +44,10 @@ class GameChannel < ApplicationCable::Channel
     opponent = @player.opponent
 
     result = opponent.check_number(data["guess"])
+    response = {action: "take_turn", turn: opponent.uuid, guess: data["guess"], bulls: result[:bulls], cows: result[:cows]}
 
-    ActionCable.server.broadcast "player_#{uuid}", {action: "take_turn", msg: "Start", bulls: result[:bulls], cows: result[:cows]}
-    ActionCable.server.broadcast "player_#{opponent.uuid}", {action: "take_turn", msg: "Start", bulls: result[:bulls], cows: result[:cows]}
+    ActionCable.server.broadcast "player_#{uuid}", response
+    ActionCable.server.broadcast "player_#{opponent.uuid}", response
   end
   
 end
