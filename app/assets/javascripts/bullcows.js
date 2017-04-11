@@ -120,6 +120,11 @@ var Game = function() {
   this.generateGuessHtml = function(data)
   {
   	var html = '<span class="guess-number">' + data.guess + '</span>';
+  	
+  	if (data.cows + data.bulls == 0) {
+  		return html + '<img src="/images/poo.png" />';
+  	}
+
   	for (var i = 0; i < data.cows; i++) {
   		html += '<img src="/images/cow.png" />';
   	}
