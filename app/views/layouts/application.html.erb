@@ -10,20 +10,39 @@
   </head>
 
   <body>
-    <div class="container">
-      <div class="heading">
-        <h1>Bulls and Cows</h1>
+    <div class="box container">
+
+      <div class="header">
+        <h1><%= image_tag("bull.png", class: "head-icon") %>Bulls and Cows<%= image_tag("cow.png", class: "head-icon") %></h1>
+        
       </div>
 
-      <div class="row">
-        <div class="col-md-12">
-          <%= yield %>
+      <div class="content">
+        <%= yield %>
+      </div>
+
+      <div class="footer">
+        <div class="row justify-content-md-center" >
+          <div class="col-md-12">
+
+            <div id="status"></div>
+
+            <form class="form-inline">
+              <div class="form-group">
+                <input type="text" class="form-control" id="user_input" placeholder="">
+              </div>
+              <button class="btn btn-primary" id="sendInputButton">Submit</button>
+            </form>
+
+            <small>Green school 2017</small>
+
+          </div>
+
         </div>
       </div>
-
-      <footer>
-        Green school 2017
-      </footer>
     </div>
+
+      
+
   </body>
 </html>

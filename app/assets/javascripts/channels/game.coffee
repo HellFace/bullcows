@@ -12,6 +12,7 @@ App.game = App.cable.subscriptions.create "GameChannel",
     @perform 'set_name', name: name
 
   send_number: (number) ->
+    $('#myNumber').html(number)
     @perform 'set_number', number: number
 
   take_guess: (guess) ->
