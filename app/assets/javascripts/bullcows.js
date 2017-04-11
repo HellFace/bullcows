@@ -38,7 +38,9 @@ var Game = function() {
 
 	this.dispatchChannelAction = function(data)
 	{
-		if (input_action != 'send_name' && !this.isValidNumber(data)) {
+		if (input_action == 'send_name') {
+			$('.myName').html(data);
+		} else if (!this.isValidNumber(data)) {
 			$('#status').html('Please enter a valid number!');
 			return false;
 		}
@@ -59,6 +61,7 @@ var Game = function() {
 	{
 		opponent = data.opponent_name;
 		$('.opponent_name').html(opponent);
+		$('#user_input').attr('maxlength', 4).attr('placeholder', 'Your number');
 		this.enableInput('send_number', 'Your opponent is ' + opponent + '. Please enter your number for the game...');
 	};
 
@@ -70,6 +73,7 @@ var Game = function() {
 	this.game_start = function(data)
 	{
 		$('#results_area').show();
+		$('#user_input').attr('placeholder', 'Guess');
     this.setTurn(data.turn);
 	};
 
@@ -120,7 +124,7 @@ var Game = function() {
   this.generateGuessHtml = function(data)
   {
   	var html = '<span class="guess-number">' + data.guess + '</span>';
-  	
+
   	if (data.cows + data.bulls == 0) {
   		return html + '<img src="/images/poo.png" />';
   	}

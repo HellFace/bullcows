@@ -26,13 +26,13 @@ body {
   .footer {
   	flex: 0 1 40px;
   	margin: 10px 0;
-  	text-align: center;
   	border-radius: 10px;
     border: 1px solid #e5e5e5;
     background-color: #d9ebff;
 
     #status {
     	margin: 10px 0;
+    	font-size:0.8rem;
     }
   }
 }
@@ -40,6 +40,25 @@ body {
 .head-icon {
 	max-height: 40px;
 	margin:20px;
+}
+
+.simple-icon {
+	max-width: 30px;
+	margin:10px;
+}
+
+.info-box {
+	font-size: 1.6rem;
+	font-weight: bold;
+}
+
+.input-box {
+	text-align: right;
+	padding-right: 25px!important;
+	input {
+		max-width: 200px;
+		display: inline-block;
+	}
 }
 
 .guess {
