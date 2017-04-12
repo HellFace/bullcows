@@ -1,39 +1,40 @@
+<div class="main">
+    
+    <div class="container">
+      <center>
+      <div class="middle">
+            <div id="login">
 
-<div id="results_area" style="display:none;">
-  <div class="half-column my-column">
-    <div class="player-heading"><span class="myName"></span> (You)</div>
-    <div class="playerGuesses" id="myGuesses"></div>
+              <form action="/" method="post">
 
-  </div>
+                <fieldset class="clearfix">
 
-  <div class="half-column opponent-column">
-    <div class="player-heading"><span class="opponent_name"></span></div>
-    <div class="playerGuesses" id="opponentGuesses"></div>
+                  <p><h4>Welcome to Bulls and Cows!</h4></p>
 
-  </div>
+                  <p>Please state your name and you can enjoy the fun game with other players online</p>
 
-</div>
+                  <p><input type="text" name="name" class="form-control" placeholder="Your Name" required></p>
 
+                  <div>
+                      <input type="submit" class="btn btn-primary" value="Get in there">
+                  </div>
 
-<div class="modal fade">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title"></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <img class="result-image" id="disconnectedImage" src="/images/disconnected.gif" style="display:none;" />
-        <img class="result-image" id="winImage" src="/images/win.gif" style="display:none;" />
-        <img class="result-image" id="loseImage" src="/images/lose.gif" style="display:none;" />
-        <img class="result-image" id="withdrawImage" src="/images/withdraw.gif" style="display:none;" />
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary new-game-button">Play again</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
+                </fieldset>
+
+                <div class="clearfix"></div>
+              </form>
+
+              <div class="clearfix"></div>
+
+            </div> <!-- end login --> 
+            <div class="logo">
+              <img src="/images/cows-initial.png" />
+            
+              <div class="clearfix"></div>  
+            </div>
+            
+            </div>
+      </center>
     </div>
-  </div>
+
 </div>

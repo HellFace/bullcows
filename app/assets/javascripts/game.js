@@ -1,3 +1,6 @@
+//= require_tree ./cable
+//= require_self
+
 /**
  * Created by martin on 08.04.17.
  */

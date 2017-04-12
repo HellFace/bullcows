@@ -1,0 +1,83 @@
+<div class="box container">
+
+  <div class="header">
+    <h1><%= image_tag("bull.png", class: "head-icon") %>Bulls and Cows<%= image_tag("cow.png", class: "head-icon") %></h1>
+    
+  </div>
+
+  <div class="content">
+    <div id="results_area" style="display:none;">
+      <div class="half-column my-column">
+        <div class="player-heading"><span class="myName"></span> (You)</div>
+        <div class="playerGuesses" id="myGuesses"></div>
+
+      </div>
+
+      <div class="half-column opponent-column">
+        <div class="player-heading"><span class="opponent_name"></span></div>
+        <div class="playerGuesses" id="opponentGuesses"></div>
+
+      </div>
+
+    </div>
+
+
+    <div class="modal fade">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <img class="result-image" id="disconnectedImage" src="/images/disconnected.gif" style="display:none;" />
+            <img class="result-image" id="winImage" src="/images/win.gif" style="display:none;" />
+            <img class="result-image" id="loseImage" src="/images/lose.gif" style="display:none;" />
+            <img class="result-image" id="withdrawImage" src="/images/withdraw.gif" style="display:none;" />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary new-game-button">Play again</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="row" >
+      <div class="col-md-4 info-box">
+        <div>
+          <img class="simple-icon" src="/images/orangeuser.png" /> <span class="opponent_name">Unknown</span>
+        </div>
+
+        <div>
+          <img class="simple-icon" src="/images/greenuser.png" /> <span id="myNumber">Number</span>
+        </div>
+      </div>
+
+
+      <div class="col-md-8 input-box">
+
+        <div id="status"></div>
+
+        <form>
+          <input type="text" class="form-control" id="user_input" placeholder="Your name">
+          <button class="btn btn-primary" id="sendInputButton">&gt;&gt;</button>
+        </form>
+
+      </div>
+
+    </div>
+
+    <div class="text-center">
+      <small>Green school 2017</small>
+    </div>
+  
+  </div>
+
+
+
+</div>

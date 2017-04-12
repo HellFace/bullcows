@@ -4,60 +4,12 @@
     <title>Bullcows</title>
     <%= csrf_meta_tags %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag    'application', params[:controller], media: 'all', 'data-turbolinks-track': 'reload' %>
     <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', params[:controller], 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
-    <div class="box container">
-
-      <div class="header">
-        <h1><%= image_tag("bull.png", class: "head-icon") %>Bulls and Cows<%= image_tag("cow.png", class: "head-icon") %></h1>
-        
-      </div>
-
-      <div class="content">
-        <%= yield %>
-      </div>
-
-      <div class="footer">
-        <div class="row" >
-          <div class="col-md-4 info-box">
-            <div>
-              <img class="simple-icon" src="/images/orangeuser.png" /> <span class="opponent_name">Unknown</span>
-            </div>
-
-            <div>
-              <img class="simple-icon" src="/images/greenuser.png" /> <span id="myNumber">Number</span>
-            </div>
-          </div>
-
-
-          <div class="col-md-8 input-box">
-
-            <div id="status"></div>
-
-            <form>
-              <input type="text" class="form-control" id="user_input" placeholder="Your name">
-              <button class="btn btn-primary" id="sendInputButton">&gt;&gt;</button>
-            </form>
-
-          </div>
-
-        </div>
-
-        <div class="text-center">
-          <small>Green school 2017</small>
-        </div>
-      
-      </div>
-    
-
-
-    </div>
-
-      
-
+    <%= yield %>
   </body>
 </html>

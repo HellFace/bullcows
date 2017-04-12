@@ -4,7 +4,12 @@ class GameChannel < ApplicationCable::Channel
   # User has connected - create a player with uuid
   def subscribed
     stream_from "player_#{uuid}"
-    @player = Player.create(uuid: uuid)
+    
+    if session[:playerName].empty?
+      session[:playerName] = Player.getRandomName
+    end
+
+    @player = Player.create(uuid: uuid, name: session[:playerName])
   end
 
   # User has disconnected

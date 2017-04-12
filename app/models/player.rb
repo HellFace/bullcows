@@ -7,6 +7,9 @@ class Player < Ohm::Model
   index :uuid
   reference :opponent, :Player
 
+  def getRandomName
+    "Player_" + SecureRandom.urlsafe_base64(5)
+  end
   
   def set_match
     finder = Player.find(status: 'waiting')
