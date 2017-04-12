@@ -264,7 +264,7 @@ var Game = function() {
 
     /**
      * Show the Winner / Loser Modal when the game ends
-     * 
+     *
      * @param turn
      */
     this.showResultModal = function(turn)
@@ -278,7 +278,7 @@ var Game = function() {
             image = '/images/lose.gif';
         }
 
-        $('#status').html(title);
+        this.disableInput(title);
         $('.modal .modal-title').html(title);
         $('.modal .result-image').attr('src', image);
         $('.modal').modal('show');
