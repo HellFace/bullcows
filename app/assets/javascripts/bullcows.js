@@ -15,6 +15,9 @@ var Game = function() {
         this.enableInput('send_name', 'You are connected. Please set your name and we will find you an opponent!');
     };
 
+    /**
+     * The connection with the server failed
+     */
     this.connectionFailed = function()
     {
     	this.showResultModal('You have been disconnected. Please refresh to try again!', 'disconnected');
