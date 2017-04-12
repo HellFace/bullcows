@@ -4,7 +4,6 @@ class GameChannel < ApplicationCable::Channel
   def subscribed
     stream_from "player_#{uuid}"
     @player = Player.create(uuid: uuid)
-    ActionCable.server.broadcast "player_#{uuid}", {action: "set_player", uuid: uuid}
   end
 
   def unsubscribed
@@ -20,8 +19,8 @@ class GameChannel < ApplicationCable::Channel
       ActionCable.server.broadcast "player_#{uuid}", {action: "waiting_opponent"}
     else
       opponent = match_result
-      ActionCable.server.broadcast "player_#{uuid}", {action: "game_pending", opponent_name: opponent.name}
-      ActionCable.server.broadcast "player_#{opponent.uuid}", {action: "game_pending", opponent_name: @player.name}
+      ActionCable.server.broadcast "player_#{uuid}", {action: "game_pending", uuid: uuid, opponent_name: opponent.name}
+      ActionCable.server.broadcast "player_#{opponent.uuid}", {action: "game_pending", uuid: opponent.uuid, opponent_name: @player.name}
     end
   end
   
