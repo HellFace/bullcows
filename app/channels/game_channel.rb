@@ -14,6 +14,10 @@ class GameChannel < ApplicationCable::Channel
   
   def set_name(data)
     @player.update(name: data["name"])
+    match_players
+  end
+
+  def match_players
     match_result = @player.set_match
     if match_result == 'waiting_opponent'
       ActionCable.server.broadcast "player_#{uuid}", {action: "waiting_opponent"}
@@ -47,6 +51,12 @@ class GameChannel < ApplicationCable::Channel
 
     ActionCable.server.broadcast "player_#{uuid}", response
     ActionCable.server.broadcast "player_#{opponent.uuid}", response
+  end
+
+  def new_game
+    @player = Player.find(uuid: uuid).first
+    @player.update(number: '')
+    match_players
   end
   
 end

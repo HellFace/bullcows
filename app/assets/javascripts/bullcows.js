@@ -1,10 +1,6 @@
 /**
  * Created by martin on 08.04.17.
  */
-$(document).on('click', '#sendInputButton', function(event) {
-    event.preventDefault();
-    App.gamePlay.dispatchChannelAction($('#user_input').val());
-});
 
 var Game = function() {
     var input_action;
@@ -55,19 +51,34 @@ var Game = function() {
         this[data.action](data);
     };
 
+    this.validateChannelActionData = function(data)
+    {
+        if (input_action === 'new_game') {
+
+        } else if (input_action === 'send_name') {
+            $('.myName').html(data);
+
+        } else if (!this.isValidNumber(data)) {
+            $('#status').html('Please enter a valid number!');
+            return false;
+        }
+
+        return true;
+    };
+
     /**
      * Send data to the cable
      *
      * @param data
+     * @param action?
      * @returns {boolean}
      */
-    this.dispatchChannelAction = function(data)
+    this.dispatchChannelAction = function(data, action)
     {
-        // The name is the only input, which must not validate as number
-        if (input_action === 'send_name') {
-            $('.myName').html(data);
-        } else if (!this.isValidNumber(data)) {
-            $('#status').html('Please enter a valid number!');
+        if (action !== undefined) {
+            input_action = action;
+        }
+        if (!this.validateChannelActionData(data)) {
             return false;
         }
 
@@ -285,3 +296,13 @@ var Game = function() {
     };
 
 };
+
+$(document).on('click', '#sendInputButton', function(event) {
+    event.preventDefault();
+    App.gamePlay.dispatchChannelAction($('#user_input').val());
+});
+
+$(document).on('click', '.new-game-button', function(event) {
+    event.preventDefault();
+    App.gamePlay.dispatchChannelAction(null, 'new_game');
+});
