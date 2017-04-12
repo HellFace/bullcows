@@ -21,7 +21,7 @@ var Game = function() {
     this.connectionFailed = function()
     {
     	this.showResultModal('You have been disconnected. Please refresh to try again!', 'disconnected');
-    }
+    };
 
     /**
      * Disable the user input. Waiting for opponent to join or their input.
@@ -44,7 +44,7 @@ var Game = function() {
     this.enableInput = function(action, status)
     {
         $('#status').html(status);
-        $('#user_input').attr('disabled', false);
+        $('#user_input').attr('disabled', false).focus();
         $('#sendInputButton').attr('disabled', false);
         input_action = action;
     };
