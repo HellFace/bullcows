@@ -317,7 +317,7 @@ var Game = function() {
     	input_action = 'new_game';
     	this.cleanupGame();
     	App.gamePlay.dispatchChannelAction();
-    }
+    };
 
     this.cleanupGame = function()
     {
