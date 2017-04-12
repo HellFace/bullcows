@@ -4,6 +4,7 @@ App.game = App.cable.subscriptions.create "GameChannel",
     App.gamePlay.init()
 
   disconnected: ->
+    App.gamePlay.connectionFailed()
 
   received: (data) ->
     App.gamePlay.dispatchAction(data)

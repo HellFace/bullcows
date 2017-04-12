@@ -9,6 +9,9 @@ class GameChannel < ApplicationCable::Channel
   def unsubscribed
     # Any cleanup needed when channel is unsubscribed
     @player = Player.find(uuid: uuid).first
+    if (@player.status == 'playing')
+      ActionCable.server.broadcast "player_#{@player.opponent.uuid}", {action: "game_withdraw"}
+    end
     @player.delete
   end
   

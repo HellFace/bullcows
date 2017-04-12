@@ -15,6 +15,11 @@ var Game = function() {
         this.enableInput('send_name', 'You are connected. Please set your name and we will find you an opponent!');
     };
 
+    this.connectionFailed = function()
+    {
+    	this.showResultModal('You have been disconnected. Please refresh to try again!', 'disconnected');
+    }
+
     /**
      * Disable the user input. Waiting for opponent to join or their input.
      *
@@ -51,6 +56,11 @@ var Game = function() {
         this[data.action](data);
     };
 
+    /**
+     * Validate data sent to the cable
+     *
+     * @param data
+     */
     this.validateChannelActionData = function(data)
     {
         if (input_action === 'new_game') {
@@ -73,11 +83,8 @@ var Game = function() {
      * @param action?
      * @returns {boolean}
      */
-    this.dispatchChannelAction = function(data, action)
+    this.dispatchChannelAction = function(data)
     {
-        if (action !== undefined) {
-            input_action = action;
-        }
         if (!this.validateChannelActionData(data)) {
             return false;
         }
@@ -109,6 +116,11 @@ var Game = function() {
         $('#user_input').attr('maxlength', 4).attr('placeholder', 'Your number');
         this.enableInput('send_number', 'Your opponent is ' + opponent + '. Please enter your number for the game...');
     };
+
+    this.game_withdraw = function()
+    {
+    	this.showResultModal('Your opponent has quit!', 'withdraw');
+    }
 
     /**
      * Waiting_number action, received from cable
@@ -264,36 +276,53 @@ var Game = function() {
      */
     this.checkWin = function(data)
     {
+
         if (data.bulls !== 4) {
             return false;
         }
 
-        this.showResultModal(data.turn);
+        var title, image;
+        if (this.isMyResult(data.turn)) {
+            title = 'Congratulations! You win!';
+            image = 'win';
+        } else {
+            title = 'Sorry! You are a loser!';
+            image = 'lose';
+        }
+
+        this.showResultModal(title, image);
 
         return true;
     };
 
     /**
-     * Show the Winner / Loser Modal when the game ends
+     * Show the Modal when the game ends
      *
      * @param turn
      */
-    this.showResultModal = function(turn)
+    this.showResultModal = function(title, image)
     {
-        var title, image;
-        if (this.isMyResult(turn)) {
-            title = 'Congratulations! You win!';
-            image = '/images/win.gif';
-        } else {
-            title = 'Sorry! You are a loser!';
-            image = '/images/lose.gif';
-        }
-
         this.disableInput(title);
         $('.modal .modal-title').html(title);
-        $('.modal .result-image').attr('src', image);
+        $('.modal .result-image').hide();
+        $('.modal #' + image + 'Image').show();
         $('.modal').modal('show');
     };
+
+    this.startNewGame = function()
+    {
+    	input_action = 'new_game';
+    	this.cleanupGame();
+    	App.gamePlay.dispatchChannelAction();
+    }
+
+    this.cleanupGame = function()
+    {
+    	$('.playerGuesses').html('');
+    	$('.opponent_name').html('Unknown');
+    	$('#myNumber').html('Number');
+    	$('#results_area').hide();
+    }
 
 };
 
@@ -304,5 +333,7 @@ $(document).on('click', '#sendInputButton', function(event) {
 
 $(document).on('click', '.new-game-button', function(event) {
     event.preventDefault();
-    App.gamePlay.dispatchChannelAction(null, 'new_game');
+    $('.modal').modal('hide');
+    App.gamePlay.startNewGame();
+    
 });
