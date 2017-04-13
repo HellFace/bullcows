@@ -6,9 +6,12 @@
   </div>
 
   <div class="content">
+
+    <div id="players_area"></div>
+
     <div id="results_area" style="display:none;">
       <div class="half-column my-column">
-        <div class="player-heading"><span class="myName"></span> (You)</div>
+        <div class="player-heading"><span class="myName"><%= @player.name %></span> (You)</div>
         <div class="playerGuesses" id="myGuesses"></div>
 
       </div>
@@ -49,12 +52,9 @@
   <div class="footer">
     <div class="row" >
       <div class="col-md-4 info-box">
-        <div>
-          <img class="simple-icon" src="/images/orangeuser.png" /> <span class="opponent_name">Unknown</span>
-        </div>
 
         <div>
-          <img class="simple-icon" src="/images/greenuser.png" /> <span id="myNumber">Number</span>
+           Your num: <span id="myNumber">not set</span>
         </div>
       </div>
 
@@ -64,7 +64,7 @@
         <div id="status"></div>
 
         <form>
-          <input type="text" class="form-control" id="user_input" placeholder="Your name">
+          <input type="text" class="form-control" id="user_input" maxlength="4">
           <button class="btn btn-primary" id="sendInputButton">&gt;&gt;</button>
         </form>
 
@@ -78,6 +78,6 @@
   
   </div>
 
-
+  <div id="playerData" hidden data-uuid="<%= @player.uuid %>" data-name="<%= @player.name %>"></div>
 
 </div>

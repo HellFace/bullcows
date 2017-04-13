@@ -6,10 +6,12 @@ class HomeController < ApplicationController
 
   def set_name
     if !params[:name].match(/^[A-Za-z0-9]+$/)
-        params[:name] = Player.getRandomName
+        params[:name] = "Player_" + SecureRandom.urlsafe_base64(5)
     end
 
+    session[:uuid] = SecureRandom.urlsafe_base64
     session[:playerName] = params[:name]
+    
     redirect_to controller: "game", action: "index"
   end
   

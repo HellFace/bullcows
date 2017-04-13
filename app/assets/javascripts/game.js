@@ -1,9 +1,20 @@
 //= require_tree ./cable
 //= require_self
 
-/**
- * Created by martin on 08.04.17.
- */
+var PlayerUpdater = function() {
+
+    this.refreshList = function(data)
+    {
+        $('#players_area').html('');
+        $.each(data, function(index, player) {
+            if (player.status) {
+            $('<a>').attr('href', '#').attr('data-uuid', player.uuid).addClass('alert alert-' + (player.status == 'waiting' ? 'success' : 'danger')).html(player.name).appendTo($('#players_area'))
+            }
+        });
+        console.log(data);
+    }
+};
+
 
 var Game = function() {
     var input_action;
@@ -11,11 +22,12 @@ var Game = function() {
     var opponent;
 
     /**
-     * Connection has been established. Player must set his name.
+     * Connection has been established. Tell the server you are ready to play
      */
-    this.init = function()
+    this.init = function(uuid)
     {
-        this.enableInput('send_name', 'You are connected. Please set your name and we will find you an opponent!');
+        player_uuid = uuid;
+        this.startNewGame();
     };
 
     /**
@@ -47,7 +59,7 @@ var Game = function() {
     this.enableInput = function(action, status)
     {
         $('#status').html(status);
-        $('#user_input').attr('disabled', false);
+        $('#user_input').attr('disabled', false).focus();
         $('#sendInputButton').attr('disabled', false);
         input_action = action;
     };
@@ -117,9 +129,8 @@ var Game = function() {
     this.game_pending = function(data)
     {
         opponent = data.opponent_name;
-        player_uuid = data.uuid;
         $('.opponent_name').html(opponent);
-        $('#user_input').attr('maxlength', 4).attr('placeholder', 'Your number');
+        $('#user_input').attr('placeholder', 'Your number');
         this.enableInput('send_number', 'Your opponent is ' + opponent + '. Please enter your number for the game...');
     };
 
@@ -149,6 +160,15 @@ var Game = function() {
         $('#user_input').attr('placeholder', 'Guess');
         this.setTurn(data.turn);
     };
+
+    /**
+     * Something went terribly wrong
+     * Redirect the user to the home page
+     */
+    this.game_quit = function()
+    {
+        window.location = '/';
+    }
 
     /**
      * Take_turn action, received from cable
@@ -326,7 +346,7 @@ var Game = function() {
     {
     	$('.playerGuesses').html('');
     	$('.opponent_name').html('Unknown');
-    	$('#myNumber').html('Number');
+    	$('#myNumber').html('not set');
     	$('#results_area').hide();
     }
 

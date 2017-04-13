@@ -1,9 +1,9 @@
 module ApplicationCable
   class Connection < ActionCable::Connection::Base
-    identified_by :uuid
+    identified_by :connid
     
     def connect
-      self.uuid = SecureRandom.urlsafe_base64
+      self.connid = SecureRandom.urlsafe_base64
     end
     
   end
