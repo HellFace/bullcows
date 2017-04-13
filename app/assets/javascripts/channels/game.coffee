@@ -10,8 +10,8 @@ $ ->
     received: (data) ->
       App.gamePlay.dispatchAction(data)
 
-    send_name: (name) ->
-      @perform 'set_name', name: name
+    set_waiting: () ->
+      @perform 'set_waiting'
 
     send_number: (number) ->
       $('#myNumber').html(number)
@@ -22,3 +22,9 @@ $ ->
 
     new_game: () ->
       @perform 'new_game'
+
+    send_invite: (uuid) ->
+      @perform 'send_invite', uuid: uuid
+
+    answer_invite: (uuid, accept) ->
+      @perform 'answer_invite', uuid: uuid, accept: accept

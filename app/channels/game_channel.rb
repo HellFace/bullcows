@@ -14,7 +14,7 @@ class GameChannel < ApplicationCable::Channel
 
     refresh_player
     # Send notification to the opponent if any
-    if (@player.status == 'playing')
+    if (@player.status == 'playing' && !@player.opponent.nil?)
       ActionCable.server.broadcast "player_#{@player.opponent.uuid}", {action: "game_withdraw"}
     end
 
@@ -29,35 +29,68 @@ class GameChannel < ApplicationCable::Channel
     @player = Player.find(uuid: @uuid).first
 
     if @player.nil?
-      send_error
+      go_home
     end
   end
 
-  def send_error
+  def go_home
     ActionCable.server.broadcast "player_#{@uuid}", {action: "game_quit"}
+  end
+
+
+  def go_dashboard(options = {})
+    player_uuid = options[:uuid] || @uuid
+    message = options[:message] || "Welcome to the BullsCows player dashboard. Enjoy!"
+    ActionCable.server.broadcast "player_#{player_uuid}", {action: "go_dashboard", message: message}
+  end
+
+
+  def set_waiting(options = {})
+    refresh_player
+    @player.update(number: '', opponent: nil, status: 'waiting')
+
+    message = options[:message] || nil
+
+    go_dashboard(message: message)
+
+    broadcast_players
+  end
+
+
+  def send_invite(data)
+    ActionCable.server.broadcast "player_#{data["uuid"]}", {action: "receive_invite", uuid: @uuid, name: @player.name}
+  end
+
+
+  def answer_invite(data)
+    # start new game
+    if (data["accept"])
+      return new_game
+    end
+
+    # send rejection
+    go_dashboard(uuid: data["uuid"], message: "Your invite has been rejected :(")
   end
 
 
   # Start a new game
   # Clear the player's number (but keep their name) and find a new opponent
-  def new_game
-    refresh_player
-    @player.update(number: '', opponent: nil)
+  def new_game(opponent_uuid)
 
-    opponent = Player.find(status: 'waiting').first
+    refresh_player
+
+    opponent = Player.find(uuid: opponent_uuid).first
 
     if opponent.nil?
-      # No opponent yet - send notification to the player to wait
-      @player.update(status: 'waiting')
-      ActionCable.server.broadcast "player_#{@uuid}", {action: "waiting_opponent"}
-    else
-      # Opponent found - Initiate game as pending
-      @player.update(status: 'playing', opponent: opponent)
-      opponent.update(status: 'playing', opponent: @player)
-
-      ActionCable.server.broadcast "player_#{@player.uuid}", {action: "game_pending", opponent_name: opponent.name}
-      ActionCable.server.broadcast "player_#{opponent.uuid}", {action: "game_pending", opponent_name: @player.name}
+      return go_dashboard(@uuid, "Something went wrong, player not found. Sorry :(")
     end
+
+    # Opponent found - Initiate game as pending
+    @player.update(status: 'playing', opponent: opponent)
+    opponent.update(status: 'playing', opponent: @player)
+
+    ActionCable.server.broadcast "player_#{@player.uuid}", {action: "game_pending", opponent_name: opponent.name}
+    ActionCable.server.broadcast "player_#{opponent.uuid}", {action: "game_pending", opponent_name: @player.name}
 
     broadcast_players
   end
@@ -74,21 +107,19 @@ class GameChannel < ApplicationCable::Channel
     opponent = @player.opponent
 
     if opponent.nil?
-      return new_game
+      return set_waiting(message: "Your opponent has gone... Sorry")
     end
 
-    if opponent.number.blank?
-      # The opponent hasn't set their number yet, send notification to the player to wait
-      ActionCable.server.broadcast "player_#{@player.uuid}", {action: "waiting_number"}
-    else
-      # Both players have set their numbers
-
+    # Both players have set their numbers
+    if !opponent.number.blank?
+      
       # Choose random player uuid to be first
       turn_uuid = [@player.uuid, opponent.uuid].sample
 
       ActionCable.server.broadcast "player_#{@player.uuid}", {action: "game_start", turn: turn_uuid}
       ActionCable.server.broadcast "player_#{opponent.uuid}", {action: "game_start", turn: turn_uuid}
     end
+
   end
 
   # Player has sent a guess
@@ -107,6 +138,7 @@ class GameChannel < ApplicationCable::Channel
     ActionCable.server.broadcast "player_#{@player.uuid}", response
     ActionCable.server.broadcast "player_#{opponent.uuid}", response
   end
+  
   
   def broadcast_players
     players = []

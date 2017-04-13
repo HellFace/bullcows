@@ -2,18 +2,26 @@
 //= require_self
 
 var PlayerUpdater = function() {
+    var player_uuid;
+
+    this.init = function(uuid)
+    {
+        player_uuid = uuid;
+    };
 
     this.refreshList = function(data)
     {
         $('#players_area').html('');
         $.each(data, function(index, player) {
-            if (player.status) {
+            if (player.status && player.uuid != player_uuid) {
             $('<a>').attr('href', '#').attr('data-uuid', player.uuid).addClass('alert alert-' + (player.status == 'waiting' ? 'success' : 'danger')).html(player.name).appendTo($('#players_area'))
             }
         });
         console.log(data);
     }
 };
+
+
 
 
 var Game = function() {
@@ -27,7 +35,9 @@ var Game = function() {
     this.init = function(uuid)
     {
         player_uuid = uuid;
-        this.startNewGame();
+        //this.startNewGame();
+        input_action = 'set_waiting';
+        this.dispatchChannelAction();
     };
 
     /**
@@ -81,12 +91,8 @@ var Game = function() {
      */
     this.validateChannelActionData = function(data)
     {
-        if (input_action === 'new_game') {
-
-        } else if (input_action === 'send_name') {
-            $('.myName').html(data);
-
-        } else if (!this.isValidNumber(data)) {
+        var number_actions = ['send_number', 'take_guess'];
+        if ($.inArray(input_action, number_actions) >= 0 && !this.isValidNumber(data)) {
             $('#status').html('Please enter a valid number!');
             return false;
         }
@@ -139,14 +145,17 @@ var Game = function() {
     	this.showResultModal('Your opponent has quit!', 'withdraw');
     }
 
-    /**
-     * Waiting_number action, received from cable
-     * User has set his number, but their opponent has not
-     */
-    this.waiting_number = function()
+    this.go_dashboard = function(data)
     {
-        this.disableInput('Waiting for your opponent to set his number');
-    };
+        $('#players_area').show();
+        $('#results_area').hide();
+        this.disableInput(data.message)
+    }
+
+    this.receive_invite = function(data)
+    {
+        $('#status').html('Received an invitation from ' + data.name);
+    }
 
     /**
      * Game_start action, received from cable
@@ -335,11 +344,21 @@ var Game = function() {
         $('.modal').modal('show');
     };
 
+    this.sendInvite = function(uuid)
+    {
+        input_action = 'send_invite';
+        this.disableInput('Sent an invitation. Waiting for response...');
+        
+        // show popup
+
+        this.dispatchChannelAction(uuid);
+    }
+
     this.startNewGame = function()
     {
     	input_action = 'new_game';
     	this.cleanupGame();
-    	App.gamePlay.dispatchChannelAction();
+    	this.dispatchChannelAction();
     }
 
     this.cleanupGame = function()
@@ -362,4 +381,9 @@ $(document).on('click', '.new-game-button', function(event) {
     $('.modal').modal('hide');
     App.gamePlay.startNewGame();
     
+});
+
+$(document).on('click', '#players_area a.alert-success', function(event) {
+    event.preventDefault();
+    App.gamePlay.sendInvite($(this).data('uuid'));
 });
