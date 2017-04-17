@@ -26,5 +26,8 @@ $ ->
     send_invite: (uuid) ->
       @perform 'send_invite', uuid: uuid
 
+    cancel_invite: (uuid) ->
+      @perform 'cancel_invite', uuid: uuid
+
     answer_invite: (uuid, accept) ->
       @perform 'answer_invite', uuid: uuid, accept: accept

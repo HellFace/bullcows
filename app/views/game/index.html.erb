@@ -2,7 +2,7 @@
 
   <div class="header">
     <h1><%= image_tag("bull.png", class: "head-icon") %>Bulls and Cows<%= image_tag("cow.png", class: "head-icon") %></h1>
-    
+
   </div>
 
   <div class="content">
@@ -25,7 +25,7 @@
     </div>
 
 
-    <div class="modal fade">
+    <div class="modal fade" id="gameResultModal">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -35,18 +35,67 @@
             </button>
           </div>
           <div class="modal-body">
-            <img class="result-image" id="disconnectedImage" src="/images/disconnected.gif" style="display:none;" />
             <img class="result-image" id="winImage" src="/images/win.gif" style="display:none;" />
             <img class="result-image" id="loseImage" src="/images/lose.gif" style="display:none;" />
-            <img class="result-image" id="withdrawImage" src="/images/withdraw.gif" style="display:none;" />
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary new-game-button">Play again</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-success new-game-button">Rematch</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Dashboard</button>
           </div>
         </div>
       </div>
     </div>
+
+    <div class="modal fade" id="disconnetedModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"></h5>
+          </div>
+          <div class="modal-body">
+            <img class="result-image" id="disconnectedImage" src="/images/disconnected.gif" style="display:none;" />
+            <img class="result-image" id="withdrawImage" src="/images/withdraw.gif" style="display:none;" />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="receivedInvitationModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Invitation received</h5>
+          </div>
+          <div class="modal-body">
+            You have received an invitation from <span class="invitationName"></span>! Do you want to play a game?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal">YES</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">NO</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="sentInvitationModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Invitation sent</h5>
+          </div>
+          <div class="modal-body">
+            Please wait for opponent's response...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel Invitation</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <div class="footer">
@@ -75,7 +124,7 @@
     <div class="text-center">
       <small>Green school 2017</small>
     </div>
-  
+
   </div>
 
   <div id="playerData" hidden data-uuid="<%= @player.uuid %>" data-name="<%= @player.name %>"></div>

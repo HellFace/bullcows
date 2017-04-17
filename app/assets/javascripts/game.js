@@ -46,7 +46,7 @@ var Game = function() {
     this.connectionFailed = function()
     {
     	this.showResultModal('You have been disconnected. Please refresh to try again!', 'disconnected');
-    }
+    };
 
     /**
      * Disable the user input. Waiting for opponent to join or their input.
@@ -143,19 +143,19 @@ var Game = function() {
     this.game_withdraw = function()
     {
     	this.showResultModal('Your opponent has quit!', 'withdraw');
-    }
+    };
 
     this.go_dashboard = function(data)
     {
         $('#players_area').show();
         $('#results_area').hide();
         this.disableInput(data.message)
-    }
+    };
 
     this.receive_invite = function(data)
     {
         $('#status').html('Received an invitation from ' + data.name);
-    }
+    };
 
     /**
      * Game_start action, received from cable
@@ -177,7 +177,7 @@ var Game = function() {
     this.game_quit = function()
     {
         window.location = '/';
-    }
+    };
 
     /**
      * Take_turn action, received from cable
@@ -352,14 +352,14 @@ var Game = function() {
         // show popup
 
         this.dispatchChannelAction(uuid);
-    }
+    };
 
     this.startNewGame = function()
     {
     	input_action = 'new_game';
     	this.cleanupGame();
     	this.dispatchChannelAction();
-    }
+    };
 
     this.cleanupGame = function()
     {
@@ -367,7 +367,7 @@ var Game = function() {
     	$('.opponent_name').html('Unknown');
     	$('#myNumber').html('not set');
     	$('#results_area').hide();
-    }
+    };
 
 };
 
