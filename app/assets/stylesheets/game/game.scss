@@ -8,6 +8,10 @@ body {
   margin: 0
 }
 
+h1 {
+    margin:0;
+}
+
 .box {
   display: flex;
   flex-flow: column;
@@ -32,7 +36,7 @@ body {
 
     #status {
     	margin: 10px 0;
-    	font-size:0.8rem;
+    	font-size:0.8em;
     }
   }
 }
@@ -48,7 +52,7 @@ body {
 }
 
 .info-box {
-	font-size: 1.4rem;
+	font-size: 1.4em;
 	font-weight: bold;
     padding: 25px;
 }
@@ -63,7 +67,7 @@ body {
 }
 
 .guess {
-	font-size:2rem;
+	font-size:2em;
 	font-weight:bold;
 	margin: 15px;
 	img {
@@ -99,7 +103,7 @@ body {
 
 	.player-heading {
 		border-bottom: 4px solid #999;
-		font-size:1.5rem;
+		font-size:1.5em;
 		font-weight: bold;
 		text-align: center;
 		padding:10px;

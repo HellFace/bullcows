@@ -1,129 +1,128 @@
 <div class="box container">
 
-  <div class="header">
-    <h1><%= image_tag("bull.png", class: "head-icon") %>Bulls and Cows<%= image_tag("cow.png", class: "head-icon") %></h1>
-
-  </div>
-
-  <div class="content">
-
-    <div id="players_area"></div>
-
-    <div id="results_area" style="display:none;">
-      <div class="half-column my-column">
-        <div class="player-heading"><span class="myName"><%= @player.name %></span> (You)</div>
-        <div class="playerGuesses" id="myGuesses"></div>
-
-      </div>
-
-      <div class="half-column opponent-column">
-        <div class="player-heading"><span class="opponent_name"></span></div>
-        <div class="playerGuesses" id="opponentGuesses"></div>
-
-      </div>
-
+    <div class="header">
+        <h1><%= image_tag("bull.png", class: "head-icon") %>Bulls and Cows<%= image_tag("cow.png", class: "head-icon") %></h1>
     </div>
 
+    <div class="content">
 
-    <div class="modal fade" id="gameResultModal">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title"></h5>
-          </div>
-          <div class="modal-body">
-            <img class="result-image" id="winImage" src="/images/win.gif" style="display:none;" />
-            <img class="result-image" id="loseImage" src="/images/lose.gif" style="display:none;" />
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-success new-game-button">Rematch</button>
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Dashboard</button>
-          </div>
+        <div id="players_area"></div>
+
+        <div id="results_area" style="display:none;">
+            <div class="half-column my-column">
+                <div class="player-heading"><span class="myName"><%= @player.name %></span> (You)</div>
+                <div class="playerGuesses" id="myGuesses"></div>
+
+            </div>
+
+            <div class="half-column opponent-column">
+                <div class="player-heading"><span class="opponent_name"></span></div>
+                <div class="playerGuesses" id="opponentGuesses"></div>
+
+            </div>
+
         </div>
-      </div>
-    </div>
 
-    <div class="modal fade" id="disconnectedModal">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title"></h5>
-          </div>
-          <div class="modal-body">
-            <img class="result-image" id="disconnectedImage" src="/images/disconnected.gif" style="display:none;" />
-            <img class="result-image" id="withdrawImage" src="/images/withdraw.gif" style="display:none;" />
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
-          </div>
+
+        <div class="modal fade" id="gameResultModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"></h5>
+                    </div>
+                    <div class="modal-body">
+                        <img class="result-image" id="winImage" src="/images/win.gif" style="display:none;" />
+                        <img class="result-image" id="loseImage" src="/images/lose.gif" style="display:none;" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success new-game-button">Rematch</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Dashboard</button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <div class="modal fade" id="receivedInvitationModal">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Invitation received</h5>
-          </div>
-          <div class="modal-body">
-            You have received an invitation from <span class="invitationName"></span>! Do you want to play a game?
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-success btn-answer-invitation" data-answer="yes" data-dismiss="modal">YES</button>
-            <button type="button" class="btn btn-danger btn-answer-invitation" data-answer="no" data-dismiss="modal">NO</button>
-          </div>
+        <div class="modal fade" id="disconnectedModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"></h5>
+                    </div>
+                    <div class="modal-body">
+                        <img class="result-image" id="disconnectedImage" src="/images/disconnected.gif" style="display:none;" />
+                        <img class="result-image" id="withdrawImage" src="/images/withdraw.gif" style="display:none;" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <div class="modal fade" id="sentInvitationModal">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Invitation sent</h5>
-          </div>
-          <div class="modal-body">
-            Please wait for opponent's response...
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger btn-cancel-invitation" data-dismiss="modal">Cancel Invitation</button>
-          </div>
+        <div class="modal fade" id="receivedInvitationModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Invitation received</h5>
+                    </div>
+                    <div class="modal-body">
+                        You have received an invitation from <span class="invitationName"></span>! Do you want to play a game?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success btn-answer-invitation" data-answer="yes" data-dismiss="modal">YES</button>
+                        <button type="button" class="btn btn-danger btn-answer-invitation" data-answer="no" data-dismiss="modal">NO</button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-  </div>
-
-  <div class="footer">
-    <div class="row" >
-      <div class="col-md-4 info-box">
-
-        <div>
-           Your num: <span id="myNumber">not set</span>
+        <div class="modal fade" id="sentInvitationModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Invitation sent</h5>
+                    </div>
+                    <div class="modal-body">
+                        Please wait for opponent's response...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger btn-cancel-invitation" data-dismiss="modal">Cancel Invitation</button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-
-
-      <div class="col-md-8 input-box">
-
-        <div id="status"></div>
-
-        <form>
-          <input type="text" class="form-control" id="user_input" maxlength="4">
-          <button class="btn btn-primary" id="sendInputButton">&gt;&gt;</button>
-        </form>
-
-      </div>
 
     </div>
 
-    <div class="text-center">
-      <small>Green school 2017</small>
+    <div class="footer">
+        <div class="row" >
+            <div class="col-md-4 info-box">
+
+                <div>
+                    Your num: <span id="myNumber">not set</span>
+                </div>
+            </div>
+
+
+            <div class="col-md-8 input-box">
+
+                <div id="status"></div>
+
+                <form>
+                    <input type="text" class="form-control" id="user_input" maxlength="4">
+                    <button class="btn btn-primary" id="sendInputButton">&gt;&gt;</button>
+                </form>
+
+            </div>
+
+        </div>
+
+        <div class="text-center">
+            <small>Green school 2017</small>
+        </div>
+
     </div>
 
-  </div>
-
-  <div id="playerData" hidden data-uuid="<%= @player.uuid %>" data-name="<%= @player.name %>"></div>
+    <div id="playerData" hidden data-uuid="<%= @player.uuid %>" data-name="<%= @player.name %>"></div>
 
 </div>
