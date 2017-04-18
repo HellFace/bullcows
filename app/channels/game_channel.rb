@@ -64,8 +64,8 @@ class GameChannel < ApplicationCable::Channel
 
   def answer_invite(data)
     # start new game
-    if (data["accept"])
-      return new_game
+    if (data["accept"] == "yes")
+      return new_game(data["uuid"])
     end
 
     # send rejection
@@ -82,7 +82,7 @@ class GameChannel < ApplicationCable::Channel
     opponent = Player.find(uuid: opponent_uuid).first
 
     if opponent.nil?
-      return go_dashboard(@uuid, "Something went wrong, player not found. Sorry :(")
+      return go_dashboard(uuid: @uuid, message: "Something went wrong, player not found. Sorry :(")
     end
 
     # Opponent found - Initiate game as pending
@@ -111,8 +111,7 @@ class GameChannel < ApplicationCable::Channel
     end
 
     # Both players have set their numbers
-    if !opponent.number.blank?
-      
+    unless opponent.number.blank?
       # Choose random player uuid to be first
       turn_uuid = [@player.uuid, opponent.uuid].sample
 

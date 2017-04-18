@@ -15,6 +15,7 @@ $ ->
 
     send_number: (number) ->
       $('#myNumber').html(number)
+      App.gamePlay.disableInput('Waiting for your opponent to set a number')
       @perform 'set_number', number: number
 
     take_guess: (guess) ->
@@ -29,5 +30,5 @@ $ ->
     cancel_invite: (uuid) ->
       @perform 'cancel_invite', uuid: uuid
 
-    answer_invite: (uuid, accept) ->
-      @perform 'answer_invite', uuid: uuid, accept: accept
+    answer_invite: (data) ->
+      @perform 'answer_invite', uuid: data.uuid, accept: data.accept

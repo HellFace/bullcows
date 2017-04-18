@@ -28,6 +28,7 @@ var Game = function() {
     var input_action;
     var player_uuid;
     var opponent;
+    var invited_uuid;
 
     /**
      * Connection has been established. Tell the server you are ready to play
@@ -45,7 +46,7 @@ var Game = function() {
      */
     this.connectionFailed = function()
     {
-    	this.showResultModal('You have been disconnected. Please refresh to try again!', 'disconnected');
+    	this.showModal('disconnected', 'You have been disconnected. Please refresh to try again!', 'disconnected');
     };
 
     /**
@@ -137,24 +138,29 @@ var Game = function() {
         opponent = data.opponent_name;
         $('.opponent_name').html(opponent);
         $('#user_input').attr('placeholder', 'Your number');
+        $('#players_area').hide();
+        this.hideAllModals();
         this.enableInput('send_number', 'Your opponent is ' + opponent + '. Please enter your number for the game...');
     };
 
     this.game_withdraw = function()
     {
-    	this.showResultModal('Your opponent has quit!', 'withdraw');
+    	this.showModal('disconnected', 'Your opponent has quit!', 'withdraw');
     };
 
     this.go_dashboard = function(data)
     {
         $('#players_area').show();
         $('#results_area').hide();
+        this.hideAllModals();
         this.disableInput(data.message)
     };
 
     this.receive_invite = function(data)
     {
-        $('#status').html('Received an invitation from ' + data.name);
+        invited_uuid = data.uuid;
+        $('.invitationName').html(data.name);
+        this.showModal('receivedInvitation', 'Received an invitation from ' + data.name);
     };
 
     /**
@@ -325,33 +331,51 @@ var Game = function() {
             image = 'lose';
         }
 
-        this.showResultModal(title, image);
+        this.showModal('gameResult', title, image);
 
         return true;
     };
 
-    /**
-     * Show the Modal when the game ends
-     *
-     * @param turn
-     */
-    this.showResultModal = function(title, image)
+
+    this.showModal = function(modalType, title, image)
     {
         this.disableInput(title);
-        $('.modal .modal-title').html(title);
-        $('.modal .result-image').hide();
-        $('.modal #' + image + 'Image').show();
-        $('.modal').modal('show');
+        var modalId = '#' + modalType + 'Modal';
+
+        $(modalId + ' .modal-title').html(title);
+
+        if ($(modalId + ' .result-image').length) {
+            $(modalId + ' .result-image').hide();
+            $(modalId + ' #' + image + 'Image').show();
+        }
+
+        $(modalId).modal('show');
+
+    };
+
+    this.hideAllModals = function()
+    {
+        $('.modal').modal('hide');
     };
 
     this.sendInvite = function(uuid)
     {
         input_action = 'send_invite';
-        this.disableInput('Sent an invitation. Waiting for response...');
-        
-        // show popup
-
+        invited_uuid = uuid;
+        this.showModal('sentInvitation', 'Sent an invitation. Waiting for response...');
         this.dispatchChannelAction(uuid);
+    };
+
+    this.answerInvite = function(answer)
+    {
+        input_action = 'answer_invite';
+        this.dispatchChannelAction({uuid: invited_uuid, accept: answer});
+    };
+
+    this.cancelInvite = function()
+    {
+        input_action = 'cancel_invite';
+        this.dispatchChannelAction(invited_uuid);
     };
 
     this.startNewGame = function()
@@ -366,7 +390,9 @@ var Game = function() {
     	$('.playerGuesses').html('');
     	$('.opponent_name').html('Unknown');
     	$('#myNumber').html('not set');
+        this.hideAllModals();
     	$('#results_area').hide();
+        $('#players_area').hide();
     };
 
 };
@@ -378,12 +404,18 @@ $(document).on('click', '#sendInputButton', function(event) {
 
 $(document).on('click', '.new-game-button', function(event) {
     event.preventDefault();
-    $('.modal').modal('hide');
     App.gamePlay.startNewGame();
-    
 });
 
 $(document).on('click', '#players_area a.alert-success', function(event) {
     event.preventDefault();
     App.gamePlay.sendInvite($(this).data('uuid'));
+});
+
+$(document).on('click', '.btn-answer-invitation', function(event) {
+    App.gamePlay.answerInvite($(this).data('answer'));
+});
+
+$(document).ready(function() {
+    $('.modal').modal({backdrop: 'static', keyboard: false, show: false});
 });
