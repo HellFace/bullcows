@@ -1,35 +1,41 @@
 body {
-  color: #606468;
-  font-family: 'Open Sans', Arial, sans-serif;
-  padding-top: 50px;
+    color: #606468;
+    font-family: 'Open Sans', Arial, sans-serif;
+    padding-top: 50px;
 }
 
-
 input {
-	font-family: 'Open Sans', Arial, sans-serif;
-	font-size: 1.6em!important;
-	line-height: 1.5em;
-	padding: 0;
-	-webkit-appearance: none;
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-size: 1.6em!important;
+    line-height: 1.5em;
+    padding: 8px;
+    -webkit-appearance: none;
+    height: 40px!important;
+    display:inline-block!important;
+}
+
+input.form-control {
+    width: 200px;
+    vertical-align: middle;
 }
 
 p {
-	line-height: 1.5em;
+    line-height: 1.5em;
 }
 
 
 #login form{
-	width: 250px;
+    text-align: right;
 }
 #login, .logo{
     display:inline-block;
     width:40%;
 }
 #login{
-  border-right:1px solid #e5e5e5;
-  margin-right: 20px;
-  padding: 0px 22px;
-  width: 59%;
+    border-right:1px solid #e5e5e5;
+    margin-right: 20px;
+    padding: 0px 22px;
+    width: 59%;
 }
 
 fieldset{
@@ -38,11 +44,10 @@ fieldset{
     margin: 0;
 }
 
-#login > p {
-	text-align: center;
+#login .info-text {
+    margin: 40px 0;
 }
 
 .middle {
-  display: flex;
-  width: 600px;
+    display: flex;
 }
