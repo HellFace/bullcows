@@ -14,7 +14,7 @@ class GameChannel < ApplicationCable::Channel
 
     refresh_player
     # Send notification to the opponent if any
-    if (@player.status == 'playing' && !@player.opponent.nil?)
+    if @player.status == 'playing' && !@player.opponent.nil?
       ActionCable.server.broadcast "player_#{@player.opponent.uuid}", {action: "game_withdraw"}
     end
 
@@ -61,15 +61,23 @@ class GameChannel < ApplicationCable::Channel
     ActionCable.server.broadcast "player_#{data["uuid"]}", {action: "receive_invite", uuid: @uuid, name: @player.name}
   end
 
+  def cancel_invite(data)
+    go_dashboard(uuid: data["uuid"], message: "The invite has been canceled. Sorry :(")
+  end
+
 
   def answer_invite(data)
     # start new game
-    if (data["accept"] == "yes")
+    if data["accept"] == "yes"
       return new_game(data["uuid"])
     end
 
     # send rejection
     go_dashboard(uuid: data["uuid"], message: "Your invite has been rejected :(")
+  end
+
+  def rematch(data)
+    new_game(data["uuid"])
   end
 
 
@@ -86,8 +94,8 @@ class GameChannel < ApplicationCable::Channel
     end
 
     # Opponent found - Initiate game as pending
-    @player.update(status: 'playing', opponent: opponent)
-    opponent.update(status: 'playing', opponent: @player)
+    @player.update(status: 'playing', opponent: opponent, number: nil)
+    opponent.update(status: 'playing', opponent: @player, number: nil)
 
     ActionCable.server.broadcast "player_#{@player.uuid}", {action: "game_pending", opponent_name: opponent.name}
     ActionCable.server.broadcast "player_#{opponent.uuid}", {action: "game_pending", opponent_name: @player.name}
@@ -141,7 +149,11 @@ class GameChannel < ApplicationCable::Channel
   
   def broadcast_players
     players = []
-    Player.all.each { |p| players << { uuid: p.uuid, name: p.name, status: p.status } }
+    Player.all.each do |p|
+      if p.status
+        players << { uuid: p.uuid, name: p.name, status: p.status }
+      end
+    end
     ActionCable.server.broadcast "game_bullcows", players
   end
   

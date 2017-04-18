@@ -4,8 +4,8 @@
 
 html,
 body {
-  height: 100%;
-  margin: 0
+    height: 100%;
+    margin: 0
 }
 
 h1 {
@@ -13,71 +13,71 @@ h1 {
 }
 
 .box {
-  display: flex;
-  flex-flow: column;
-  height: 100%;
-  .header {
-  	flex: 0 1 auto;
-  	text-align: center;
-  }
-  .content {
-  	flex: 1 1 auto;
-  	border-radius: 10px;
-  	border: 1px solid #e5e5e5;
-  	background-color: #fafafa;
-  	display: flex;
-  }
-  .footer {
-  	flex: 0 1 40px;
-  	margin: 10px 0;
-  	border-radius: 10px;
-    border: 1px solid #e5e5e5;
-    background-color: #d9ebff;
-
-    #status {
-    	margin: 10px 0;
-    	font-size:0.8em;
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    .header {
+        flex: 0 1 auto;
+        text-align: center;
     }
-  }
+    .content {
+        flex: 1 1 auto;
+        border-radius: 10px;
+        border: 1px solid #e5e5e5;
+        background-color: #fafafa;
+        display: flex;
+    }
+    .footer {
+        flex: 0 1 40px;
+        margin: 10px 0;
+        border-radius: 10px;
+        border: 1px solid #e5e5e5;
+        background-color: #d9ebff;
+
+        #status {
+            margin: 10px 0;
+            font-size:0.8em;
+        }
+    }
 }
 
 .head-icon {
-	max-height: 40px;
-	margin:20px;
+    max-height: 40px;
+    margin:20px;
 }
 
 .simple-icon {
-	max-width: 30px;
-	margin:10px;
+    max-width: 30px;
+    margin:10px;
 }
 
 .info-box {
-	font-size: 1.4em;
-	font-weight: bold;
+    font-size: 1.4em;
+    font-weight: bold;
     padding: 25px;
 }
 
 .input-box {
-	text-align: right;
-	padding-right: 25px!important;
-	input {
-		max-width: 200px;
-		display: inline-block;
-	}
+    text-align: right;
+    padding-right: 25px!important;
+    input {
+        max-width: 200px;
+        display: inline-block;
+    }
 }
 
 .guess {
-	font-size:2em;
-	font-weight:bold;
-	margin: 15px;
-	img {
-		max-height: 40px;
-		float: right;
-	}
+    font-size:2em;
+    font-weight:bold;
+    margin: 15px;
+    img {
+        max-height: 40px;
+        float: right;
+    }
 }
 
 #results_area {
-	width: 100%;
+    width: 100%;
 }
 
 #players_area {
@@ -89,42 +89,46 @@ h1 {
 }
 
 .half-column {
-	width:50%;
-	float:left;
-	height:100%;
+    width:50%;
+    float:left;
+    height:100%;
 
-  display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
-  display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
-  display: -ms-flexbox;      /* TWEENER - IE 10 */
-  display: -webkit-flex;     /* NEW - Chrome */
-  display: flex; 
+    display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+    display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+    display: -ms-flexbox;      /* TWEENER - IE 10 */
+    display: -webkit-flex;     /* NEW - Chrome */
+    display: flex;
 
-  flex-flow: column;
+    flex-flow: column;
 
-	.player-heading {
-		border-bottom: 4px solid #999;
-		font-size:1.5em;
-		font-weight: bold;
-		text-align: center;
-		padding:10px;
-		flex: 0 1 auto;
-	}
+    .player-heading {
+        border-bottom: 4px solid #999;
+        font-size:1.5em;
+        font-weight: bold;
+        text-align: center;
+        padding:10px;
+        flex: 0 1 auto;
+    }
 
-	.playerGuesses {
-		overflow-y: auto;
-		flex: 1 1 1px;
-	}
+    .playerGuesses {
+        overflow-y: auto;
+        flex: 1 1 1px;
+    }
 }
 .half-column.my-column {
-	border-right: 2px solid #999;
+    border-right: 2px solid #999;
 }
 .half-column.opponent-column {
-	border-left: 2px solid #999;
+    border-left: 2px solid #999;
 }
 
 .modal-content {
-  text-align: center;
-  h5 {
-    width:100%;
-  }
+    text-align: center;
+    h3 {
+        width:100%;
+    }
+    .modal-header, .modal-footer {
+        border:0;
+        text-align: center;
+    }
 }

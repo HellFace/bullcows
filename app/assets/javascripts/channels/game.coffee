@@ -21,8 +21,8 @@ $ ->
     take_guess: (guess) ->
       @perform 'take_guess', guess: guess
 
-    new_game: () ->
-      @perform 'new_game'
+    rematch: (uuid) ->
+      @perform 'rematch', uuid: uuid
 
     send_invite: (uuid) ->
       @perform 'send_invite', uuid: uuid

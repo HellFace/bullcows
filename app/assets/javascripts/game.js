@@ -36,7 +36,11 @@ var Game = function() {
     this.init = function(uuid)
     {
         player_uuid = uuid;
-        //this.startNewGame();
+        this.setWaiting();
+    };
+
+    this.setWaiting = function()
+    {
         input_action = 'set_waiting';
         this.dispatchChannelAction();
     };
@@ -135,6 +139,7 @@ var Game = function() {
      */
     this.game_pending = function(data)
     {
+        this.cleanupGame();
         opponent = data.opponent_name;
         $('.opponent_name').html(opponent);
         $('#user_input').attr('placeholder', 'Your number');
@@ -152,6 +157,7 @@ var Game = function() {
     {
         $('#players_area').show();
         $('#results_area').hide();
+        invited_uuid = null;
         this.hideAllModals();
         this.disableInput(data.message)
     };
@@ -378,11 +384,10 @@ var Game = function() {
         this.dispatchChannelAction(invited_uuid);
     };
 
-    this.startNewGame = function()
+    this.startRematch = function()
     {
-    	input_action = 'new_game';
-    	this.cleanupGame();
-    	this.dispatchChannelAction();
+    	input_action = 'rematch';
+    	this.dispatchChannelAction(invited_uuid);
     };
 
     this.cleanupGame = function()
@@ -402,9 +407,12 @@ $(document).on('click', '#sendInputButton', function(event) {
     App.gamePlay.dispatchChannelAction($('#user_input').val());
 });
 
-$(document).on('click', '.new-game-button', function(event) {
-    event.preventDefault();
-    App.gamePlay.startNewGame();
+$(document).on('click', '.btn-rematch', function(event) {
+    App.gamePlay.startRematch();
+});
+
+$(document).on('click', '.btn-dashboard, .btn-disconnect', function(event) {
+    App.gamePlay.setWaiting();
 });
 
 $(document).on('click', '#players_area a.alert-success', function(event) {
@@ -414,6 +422,10 @@ $(document).on('click', '#players_area a.alert-success', function(event) {
 
 $(document).on('click', '.btn-answer-invitation', function(event) {
     App.gamePlay.answerInvite($(this).data('answer'));
+});
+
+$(document).on('click', '.btn-cancel-invitation', function(event) {
+    App.gamePlay.cancelInvite();
 });
 
 $(document).ready(function() {
