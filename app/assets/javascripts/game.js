@@ -17,7 +17,6 @@ var PlayerUpdater = function() {
             $('<a>').attr('href', '#').attr('data-uuid', player.uuid).addClass('alert alert-' + (player.status == 'waiting' ? 'success' : 'danger')).html(player.name).appendTo($('#players_area'))
             }
         });
-        console.log(data);
     }
 };
 
