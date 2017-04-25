@@ -1,6 +1,6 @@
 class GameController < ApplicationController
     def index
-        if (session[:uuid].empty?)
+        if (sesssion[:uuid].nil? || session[:uuid].empty?)
             redirect_to controller: "home", action: "index"
         end
 
