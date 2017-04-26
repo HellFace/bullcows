@@ -14,7 +14,7 @@ class GameChannel < ApplicationCable::Channel
 
     refresh_player
     # Send notification to the opponent if any
-    if @player.status == 'playing' && !@player.opponent.nil?
+    if !@player.nil? && @player.status == 'playing' && !@player.opponent.nil?
       ActionCable.server.broadcast "player_#{@player.opponent.uuid}", {action: "game_withdraw"}
     end
 
