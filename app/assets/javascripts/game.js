@@ -419,6 +419,10 @@ $(document).on('click', '#players_area a.alert-success', function(event) {
     App.gamePlay.sendInvite($(this).data('uuid'));
 });
 
+$(document).on('click', '#players_area a.alert-danger', function(event) {
+    event.preventDefault();
+});
+
 $(document).on('click', '.btn-answer-invitation', function(event) {
     App.gamePlay.answerInvite($(this).data('answer'));
 });
