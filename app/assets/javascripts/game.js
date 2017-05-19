@@ -28,6 +28,7 @@ var Game = function() {
     var player_uuid;
     var opponent;
     var invited_uuid;
+    var turn_uuid;
 
     /**
      * Connection has been established. Tell the server you are ready to play
@@ -229,27 +230,20 @@ var Game = function() {
         return uniqueDigits.length === 4;
     };
 
+    this.getPlayerTurn = function()
+    {
+        return turn_uuid;
+    }
+
     /**
      * Check if it is current user's turn
      *
      * @param uuid
      * @returns {boolean}
      */
-    this.isMyTurn = function(uuid)
+    this.isMyTurn = function()
     {
-        return uuid === player_uuid;
-    };
-
-    /**
-     * Check if the received result from the take_turn action was the current user's guess
-     * If the current turn is not the current user, then the last turn was his
-     *
-     * @param uuid
-     * @returns {boolean}
-     */
-    this.isMyResult = function(uuid)
-    {
-        return !this.isMyTurn(uuid);
+        return this.getPlayerTurn() === player_uuid;
     };
 
     /**
@@ -259,7 +253,8 @@ var Game = function() {
      */
     this.setTurn = function(uuid)
     {
-        if (this.isMyTurn(uuid)) {
+        turn_uuid = uuid;
+        if (this.isMyTurn()) {
             this.enableInput('take_guess', 'It\'s your turn. Make a guess!');
         } else {
             this.disableInput('It\'s ' + opponent + '\'s turn. Please wait...');
@@ -300,7 +295,7 @@ var Game = function() {
     this.appendResult = function(data)
     {
         // This was current user's guess
-        if (this.isMyResult(data.turn)) {
+        if (this.isMyTurn()) {
             divId = '#myGuesses';
             guessClass = 'success';
         } else {
@@ -328,7 +323,7 @@ var Game = function() {
         }
 
         var title, image;
-        if (this.isMyResult(data.turn)) {
+        if (this.isMyTurn()) {
             title = 'Congratulations! You win!';
             image = 'win';
         } else {
@@ -383,6 +378,12 @@ var Game = function() {
         this.dispatchChannelAction(invited_uuid);
     };
 
+    this.cancelRematch = function()
+    {
+        input_action = 'cancel_rematch';
+        this.dispatchChannelAction(invited_uuid);
+    };
+
     this.startRematch = function()
     {
     	input_action = 'rematch';
@@ -391,6 +392,7 @@ var Game = function() {
 
     this.cleanupGame = function()
     {
+        turn_uuid = null;
     	$('.playerGuesses').html('');
     	$('.opponent_name').html('Unknown');
     	$('#myNumber').html('not set');
@@ -410,8 +412,13 @@ $(document).on('click', '.btn-rematch', function(event) {
     App.gamePlay.startRematch();
 });
 
-$(document).on('click', '.btn-dashboard, .btn-disconnect', function(event) {
+$(document).on('click', '.btn-disconnect', function(event) {
     App.gamePlay.setWaiting();
+});
+
+$(document).on('click', '.btn-dashboard', function(event) {
+    App.gamePlay.setWaiting();
+    App.gamePlay.cancelRematch();
 });
 
 $(document).on('click', '#players_area a.alert-success', function(event) {

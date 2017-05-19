@@ -80,6 +80,13 @@ class GameChannel < ApplicationCable::Channel
     new_game(data["uuid"])
   end
 
+  def cancel_rematch(data)
+    opponent = Player.find(uuid: data["uuid"]).first
+    opponent.update(number: '', opponent: nil, status: 'waiting')
+    go_dashboard(uuid: data["uuid"], message: "Your opponent canceled the game :(")
+    broadcast_players
+  end
+
 
   # Start a new game
   # Clear the player's number (but keep their name) and find a new opponent

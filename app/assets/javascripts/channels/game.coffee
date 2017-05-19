@@ -1,5 +1,6 @@
 $ ->
-  App.game = App.cable.subscriptions.create { channel: "GameChannel", uuid: $('#playerData').data('uuid'), name: $('#playerData').data('name') },
+  player_uuid = $('#playerData').data('uuid')
+  App.game = App.cable.subscriptions.create { channel: "GameChannel", uuid: player_uuid, name: $('#playerData').data('name') },
     connected: ->
       App.gamePlay = new Game()
       App.gamePlay.init($('#playerData').data('uuid'))
@@ -19,10 +20,14 @@ $ ->
       @perform 'set_number', number: number
 
     take_guess: (guess) ->
-      @perform 'take_guess', guess: guess
+      if (App.gamePlay.isMyTurn())
+        @perform 'take_guess', guess: guess
 
     rematch: (uuid) ->
       @perform 'rematch', uuid: uuid
+
+    cancel_rematch: (uuid) ->
+      @perform 'cancel_rematch', uuid: uuid
 
     send_invite: (uuid) ->
       @perform 'send_invite', uuid: uuid
